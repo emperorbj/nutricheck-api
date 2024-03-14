@@ -23,6 +23,7 @@ mongoose.connect('mongodb://localhost:27017/Nutricheck')
 app.post('/register',(req,res)=>{
     let user = req.body;
 
+    // encrypting passwords
         bcrypt.genSalt(10,(err,salt)=>{
             if(!err)
             {
