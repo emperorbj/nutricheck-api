@@ -19,7 +19,7 @@ mongoose.connect('mongodb://localhost:27017/Nutricheck')
 .catch((err)=>{
     console.log(err)
 })
-
+// End point for registration 
 app.post('/register',(req,res)=>{
     let user = req.body;
 
