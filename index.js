@@ -54,7 +54,56 @@ app.post('/register',(req,res)=>{
 })
 
 // end point for login
+app.post('/login',async (req,res)=>{
 
+    let validUser = req.body;
+    try
+    {
+        const user = await userModel.findOne({email:validUser.email})
+        if(user!==null)
+        {
+            bcrypt.compare(validUser.password,user.password,(err,success)=>{
+                if(success==true)
+                {
+                    // generate token after successful login
+                    jwt.sign({email:validUser.email},'tokenKey',(err,token)=>{
+                        if(!err)
+                        {
+                            res.send({message:'login success',token:token})
+                        }
+
+                        else
+                        {
+                            res.send({message:'error generating token'})
+                        }
+                    })
+                    
+                }
+
+                else
+                {
+                    res.status(403).send({message:'incorrect password'})
+                }
+
+            })
+        }
+
+        else
+        {
+            res.status(404).send({message:'user not found'})
+        }
+    }
+
+    catch(err)
+    {
+        console.log(err)
+        res.status(500).send({message:'some problem'})
+    }
+    
+
+
+
+})
 
 
 
