@@ -59,6 +59,7 @@ app.post('/login',async (req,res)=>{
     let validUser = req.body;
     try
     {
+        // find user with this email in the db
         const user = await userModel.findOne({email:validUser.email})
         if(user!==null)
         {
