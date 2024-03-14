@@ -34,6 +34,7 @@ app.post('/register',(req,res)=>{
                         
                         try
                         {
+                            // adding  new collection of user with encrypted password into db 
                             let doc = await userModel.create(user)
                             res.status(201).send({message:'user registration successful'})
                         }
