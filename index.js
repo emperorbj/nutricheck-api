@@ -148,6 +148,43 @@ app.get('/foods/:name',verifyToken,async (req,res)=>{
 })
 
 
+// end point for tracking foods
+
+app.post('/track',verifyToken,async (req,res)=>{
+
+    let trackData = req.body;
+    try
+    {
+        let data = await trackingModel.create(trackData)
+        res.status(201).send({message:'track post successful'})
+    }
+    catch(err)
+    {
+        console.log(err)
+        res.status(500).send({message:'error track post request'})
+    }
+    
+})
+
+
+app.get('/track/:userid/:date',verifyToken,async (req,res)=>{
+    let userid = req.params.userid
+    let date = new Date(req.params.date)
+    let stringDate = date.getDate() + "/" + (date.getMonth()+1) + "/" + date.getFullYear()
+
+    try
+    {
+        let foods = await trackingModel.find({userID:userid,dateTrack:stringDate}).populate('userID').populate('foodID')
+        res.send(foods)
+    }
+
+    catch(err)
+    {
+        console.log(err)
+        res.status(500).send({message:'error track userid post request'})
+    }
+})
+
 
 
 app.listen(8000,()=>{
