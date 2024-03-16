@@ -107,6 +107,47 @@ app.post('/login',async (req,res)=>{
 })
 
 
+// end point for fetching food products
+// middleware for verifying token is in a separate file which can be reused
+app.get('/foods',verifyToken,async (req,res)=>{
+    try
+    {
+        let foods = await foodModel.find()
+        res.send(foods)
+    }
+    catch(err)
+    {
+        res.status(500).send({message:'problem fetching data'})
+    }
+})
+
+// end point for fetching food products by name
+
+app.get('/foods/:name',verifyToken,async (req,res)=>{
+
+    try
+    {
+        // $regex --- this makes sure that any name parameter fetched looks for 
+        // a similar match 
+        // $options: 'i' means the name parameter should be case insensitive
+        let data = await foodModel.find({name:{$regex:req.params.name, $options:'i'}})
+        if(data.length!==0)
+        {
+            res.status(200).send(data)
+        }
+        else
+        {
+            res.status(404).send({message:'problem fetching food by name'})
+        }
+    }
+    catch(err)
+    {
+        console.log(err)
+        res.status(500).send({message:'food item not found'})
+    }
+})
+
+
 
 
 app.listen(8000,()=>{
